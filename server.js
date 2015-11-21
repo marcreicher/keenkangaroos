@@ -4,6 +4,7 @@ var cheerio = require('cheerio');
 var app = express();
 
 app.use(express.static(__dirname + '/client'))
+app.use(express.static(__dirname + '/node_modules'))
 
 apiurl = 'http://youtubeinmp3.com/fetch/?format=JSON&video=http://www.youtube.com';
 
