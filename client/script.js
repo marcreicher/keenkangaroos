@@ -1,9 +1,28 @@
-angular.module('MyApp', ["firebase"])
+angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search','queue'])
 // .controller('SongsController', function($scope, $firebaseArray){
 //   var ref = new Firebase("https://blazing-fire-8914.firebaseio.com/2/5/");
 //   $scope.songs = {};
 //   $scope.songs.list = $firebaseArray(ref);
 // })
+.config(function($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/search');
+  $stateProvider
+    .state('search', {
+      url: '/search',
+      controller: 'searchController',
+      templateUrl: 'search/search.html'
+    })
+    .state('videoplayer', {
+      url: '/videoplayer',
+      controller: 'videoplayerController',
+      templateUrl: 'videoplayer/videoplayer.html'
+    })
+    .state('queue', {
+      url: '/queue',
+      controller: 'queueController',
+      templateUrl: 'queue/queue.html'
+    })
+})
 .controller('MyController', ['$scope', '$http', '$firebaseArray', function ($scope, $http, $firebaseArray) {
   $scope.decade;
   $scope.year;
