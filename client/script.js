@@ -29,8 +29,8 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search','queue
   $('a').on('click', function() {
     $scope.decade = $(this).parent().parent().data('decade');
     $scope.year = $(this).data('year');
-    console.log($scope.decade, $scope.year, "https://blazing-fire-8914.firebaseio.com/"+$scope.decade+"/"+$scope.year+"/")
     var ref = $firebaseArray(new Firebase("https://blazing-fire-8914.firebaseio.com/"+$scope.decade+"/"+$scope.year+"/"));
+    console.log($scope.decade, $scope.year, "https://blazing-fire-8914.firebaseio.com/"+$scope.decade+"/"+$scope.year+"/")
     // $scope.songs = {};
     ref.$loaded(function(data){
       $scope.songs = {};

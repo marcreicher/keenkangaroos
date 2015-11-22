@@ -1,1 +1,7 @@
-<div>search</div>
+<div>
+ <form>
+   <input placeholder='Enter song or artist here' ng-model='userInput'>
+   <button ng-click='searchSong(userInput)'>Search</button>
+   {{userInput}}
+ </form>
+</div>
