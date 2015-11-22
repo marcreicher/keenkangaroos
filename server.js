@@ -1,7 +1,11 @@
 var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
+var bodyParser = require('body-parser')
 var app = express();
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/client'))
 app.use(express.static(__dirname + '/node_modules'))
@@ -38,6 +42,10 @@ app.get('/results', function(req, res){
     }
   });
 });
+app.post('/userSearch', function(req, res) {
+  console.log(req.body.userInput);
+  res.end();
+})
 
 
 app.listen(8001, function() {
