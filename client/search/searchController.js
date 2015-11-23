@@ -13,6 +13,9 @@ angular.module('search', [])
       data: {userInput: input}
 
     })
+    .then(function(res) {
+      console.log(res.data);
+    })
   }
 
 
