@@ -9,7 +9,6 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/client'))
 app.use(express.static(__dirname + '/node_modules'))
-//test
 
 apiurl = 'http://youtubeinmp3.com/fetch/?format=JSON&video=http://www.youtube.com';
 
