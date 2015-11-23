@@ -1,5 +1,5 @@
 angular.module('queue', [])
-// script tag in index.html
+// DONE script tag in index.html
 
 // DONE queue module should be DI'd into script.js
 
@@ -18,8 +18,9 @@ angular.module('queue', [])
   };
 
   var remove = function(queue, title) {
-  	for (var i=0; i<queue.length; i++) {
+  	for (var i=0; i < queue.length; i++) {
   		if (queue[i].songTitle === title) {
+  			console.log('removing ' + title + ' from queue');
   			return queue.splice(i, 1);
   		}
   	}

@@ -19,7 +19,6 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     })
     .state('queue', {
       url: '/queue',
-      controller: 'MyController',
       templateUrl: 'queue/queue.html'
     })
 })
@@ -27,62 +26,62 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
 .controller('MyController', ['$scope', '$http', '$firebaseArray', 'queueServices', function ($scope, $http, $firebaseArray, queueServices) {
   $scope.decade;
   $scope.year;
+  $scope.queue = [];
+  $scope.currentSong;
 
   $('a').on('click', function() {
     $scope.decade = $(this).parent().parent().data('decade');
     $scope.year = $(this).data('year');
-    // console.log($scope.decade, $scope.year, "https://blazing-fire-8914.firebaseio.com/"+$scope.decade+"/"+$scope.year+"/")
-    var ref = $firebaseArray(new Firebase("https://blazing-fire-8914.firebaseio.com/"+$scope.decade+"/"+$scope.year+"/"));
+    var ref = $firebaseArray(new Firebase("https://blazing-fire-8914.firebaseio.com/" + $scope.decade + "/" + $scope.year + "/"));
     ref.$loaded(function(data){
       $scope.songs = {};
       $scope.songs.list = data;
-
       console.log('just loaded ' + data.length + ' items');
     })
   })
 
-
-  $scope.queue = [];
-
-  var playNext = function() {
-    var next = $scope.queue.shift();
-    console.log('next song to play is: ' + next.songTitle);
-    $('audio').attr('src', next.source);
-  };
-
-  $("#player").bind('ended', function(){
+  $('#player').bind('ended', function(){
     $('audio').attr('src', '');
     if ($scope.queue.length > 0) {
       playNext();
     }
   });
 
-
   $scope.enqueue = function() {
     $scope.resultsPath = this.songs.youTubeUrl.slice(22)
     var artist = this.songs.artist;
     var songTitle = this.songs.songTitle;
-
     console.log('adding ' + artist + '\'s song: ' + songTitle);
-
     queueServices.getSong($scope.resultsPath)
     .success(function(data) {
-
-      console.log('line 66: song link returned');
+      console.log('http success, song link returned');
       if ($scope.queue.length === 0 && $('audio').attr('src') === '') {
         console.log('nothing in queue, playing first song');
-        $('audio').attr('src', data)
+        $scope.currentSong = artist + ' - ' + songTitle;
+        $('audio').attr('src', data);
       } else {
-        $scope.queue.push({ artist: artist, songTitle: songTitle, source: data });
+        $scope.queue.push({ artist: artist, songTitle: songTitle, youTubeUrl: data });
         console.log('the length of the queue is now: ' + $scope.queue.length);
       }
     })
   };
   
   $scope.dequeue = function() {
-    var queueCopy = $scope.queue;
-    var newQueue = queueServices.remove(queueCopy, this.track.title);
-    $scope.queue = newQueue;
+    var newQueue = queueServices.remove($scope.queue, this.track.songTitle);
+    $scope.$apply(function() {
+      $scope.queue = newQueue
+      console.log('new queue length is ' + $scope.queue.length);
+    })
+  };
+
+  function playNext() {
+    var next = $scope.queue.shift();
+    console.log('next song to play is: ' + next.songTitle);
+    // $apply kickstarts the $digest cycle to update current song and $scope.queue
+    $scope.$apply(function () {
+      $scope.currentSong = next.artist + '  -  ' + next.songTitle;
+    });
+    $('audio').attr('src', next.youTubeUrl);
   };
   
 }])
