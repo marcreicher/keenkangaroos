@@ -1,1 +1,7 @@
-<div>queue</div>
+<div id="queueView">
+	<h1>Queue goes here</h1>
+	<div ng-repeat="track in queue">
+		<span style='cursor:pointer' ng-click='dequeue()'> RANDOM TEXT {{track.artist}}  -  {{track.songTitle}}</span>
+	</div>
+
+</div>
