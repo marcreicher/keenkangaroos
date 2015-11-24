@@ -14,8 +14,18 @@ angular.module('search', [])
 
     })
     .then(function(res) {
-      console.log(res.data);
+      $scope.searchResults = res.data;
     })
+  }
+
+    $scope.sendUrl = function(youTubeUrl) {
+    $scope.resultsPath = youTubeUrl.slice(22)
+    console.log($scope.resultsPath);
+    $http.get($scope.resultsPath).success(function(data){
+      console.log("HELLO: ", data)
+      $('audio').attr('src', data);
+      // audio.src = data;
+    });
   }
 
 

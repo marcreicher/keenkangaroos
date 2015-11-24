@@ -7,17 +7,28 @@ Fireproof.bless(Promise);
 // var usersRef = fireproof.child('users');
 
 module.exports.findArtist = function(req, res, next) {
+  var searchParam = req.body.userInput
   res.searchResults = [];
-  console.log("reaching middleware")
-  fireproof.orderByChild("artist")
-  .equalTo("Patti Page")
+  console.log(req.body)
+  fireproof.orderByChild("songTitle")
+  .equalTo(searchParam)
   .on('child_added', function(snapshot) {
+    console.log("snapshot: " + snapshot)
     res.searchResults.push(snapshot.val());
-  console.log("snapchat.val: " + JSON.stringify(snapshot.val()))
+    console.log("snapchat.val: " + JSON.stringify(snapshot.val()))
   })
+  // .then(function() {
+  // // console.log("searchParam: " + searchParam)
+  //   fireproof.orderByChild("artist")
+  //   .equalTo(searchParam)
+  //   .on('child_added', function(snapshot) {
+  //   res.searchResults.push(snapshot.val());
+  //   })
+  // })
   .then(function() {
-
+    console.log('rejected')
     next()
+  }, function() {
   })
 
 }
