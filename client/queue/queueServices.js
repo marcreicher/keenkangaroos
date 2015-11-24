@@ -1,12 +1,25 @@
 angular.module('queue', [])
 
 .factory('queueServices', function($http) {
+
+	var queue = [];
+
+	var addToQueue = function(artist, title, src) {
+   	if (queue.length === 0 && $('audio').attr('src') === '') {
+      console.log('nothing in queue, playing first song');
+      $('audio').attr('src', src);
+      return ({artist: artist, songTitle: title, source: src})
+    } else {
+      queue.push({ artist: artist, songTitle: title, source: src });
+      console.log('queue length: ' + queue.length);
+    }
+	};
   
   var getSong = function(resultsPath) {
   	return $http.get(resultsPath);
   };
 
-  var remove = function(queue, title) {
+  var remove = function(title) {
   	for (var i=0; i < queue.length; i++) {
   		if (queue[i].songTitle === title) {
   			console.log('removing ' + title + ' from queue');
@@ -16,7 +29,9 @@ angular.module('queue', [])
   };
 
   return {
+  	queue: queue,
   	getSong: getSong,
+  	addToQueue: addToQueue,
   	remove: remove
   };
 
