@@ -1,6 +1,25 @@
 angular.module('search', [])
 
-.controller('searchController', function($scope, $http) {
+.controller('searchController', function($scope, $http, queueServices) {
+  console.log(queueServices);
+
+  $scope.searchResults = [];
+
+  $scope.enqueue = function(artist, title, youTubeUrl) {
+    var resultsPath = youTubeUrl.slice(22);
+    var artist = artist;
+    var songTitle = title;
+    console.log('adding ' + artist + '\'s song: ' + songTitle);
+
+    queueServices.getSong(resultsPath)
+    .success(function(data) {
+      console.log('http success, song link returned: ' + data);
+      var first = queueServices.addToQueue(artist, songTitle, data);
+      if (first) {
+        $scope.$parent.currentSong = first;
+      }
+    })
+  };
 
   $scope.searchSong = function(input) {
     return $http({
