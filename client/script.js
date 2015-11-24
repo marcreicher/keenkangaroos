@@ -22,9 +22,8 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
 .controller('MyController', ['$scope', '$http', '$firebaseArray', 'queueServices', function ($scope, $http, $firebaseArray, queueServices) {
   $scope.decade;
   $scope.year;
-
-  $scope.queue = queueServices.queue;
   $scope.currentSong;
+  $scope.queue = queueServices.queue;
 
   $('a').on('click', function() {
     $scope.decade = $(this).parent().parent().data('decade');
@@ -41,6 +40,10 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     $('audio').attr('src', '');
     if (queueServices.queue.length > 0) {
       $scope.playNext();
+    } else {
+      $scope.$apply(function() {
+        $scope.currentSong = null;
+      });
     }
   });
 
@@ -70,9 +73,11 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
 
   $scope.playNext = function(param) {
     var next = queueServices.queue.shift();
-    console.log('next song to play is: ' + next.songTitle);
     if (param){
-      $scope.currentSong = next;  
+      $scope.currentSong = next || null; 
+      if (!next) {
+        $('audio').attr('src', '');
+      } 
     } else {
       // $apply kickstarts the $digest cycle to update current song and $scope.queue
       $scope.$apply(function () {
