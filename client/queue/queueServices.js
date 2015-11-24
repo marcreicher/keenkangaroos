@@ -4,8 +4,6 @@ angular.module('queue', [])
 
 	var queue = [];
 
-	var currentSong;
-
 	var addToQueue = function(artist, title, src) {
    	if (queue.length === 0 && $('audio').attr('src') === '') {
       console.log('nothing in queue, playing first song');
@@ -32,7 +30,6 @@ angular.module('queue', [])
 
   return {
   	queue: queue,
-  	currentSong: currentSong,
   	getSong: getSong,
   	addToQueue: addToQueue,
   	remove: remove
