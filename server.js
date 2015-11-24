@@ -1,8 +1,9 @@
 var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 var app = express();
+var queries = require('./searchMiddleware');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -42,9 +43,9 @@ app.get('/results', function(req, res){
     }
   });
 });
-app.post('/userSearch', function(req, res) {
+app.post('/userSearch', queries.findArtist, function(req, res) {
   console.log(req.body.userInput);
-  res.end();
+  res.send(res.searchResults);
 })
 
 

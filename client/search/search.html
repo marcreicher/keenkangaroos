@@ -1,7 +1,13 @@
 <div>
- <form>
+ <form >
    <input placeholder='Enter song or artist here' ng-model='userInput'>
-   <button ng-click='searchSong(userInput)'>Search</button>
-   {{userInput}}
+   <button ng-click='searchSong(userInput)' >Search</button>
+   <div ng-repeat="song in searchResults" ng-click="sendUrl(song.youTubeUrl)">
+   {{song.songTitle}}
+   {{song.year}}
+   </div>
  </form>
 </div>
+
+
+<!-- sendUrl(song.youTubeUrl) -->
