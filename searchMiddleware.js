@@ -11,24 +11,13 @@ module.exports.findArtist = function(req, res, next) {
   res.searchResults = [];
   console.log(req.body)
   fireproof.orderByChild("songTitle")
-  .equalTo(searchParam)
   .on('child_added', function(snapshot) {
-    console.log("snapshot: " + snapshot)
+    if(snapshot.val().songTitle === searchParam || snapshot.val().artist === searchParam) {
     res.searchResults.push(snapshot.val());
-    console.log("snapchat.val: " + JSON.stringify(snapshot.val()))
+    }
   })
-  // .then(function() {
-  // // console.log("searchParam: " + searchParam)
-  //   fireproof.orderByChild("artist")
-  //   .equalTo(searchParam)
-  //   .on('child_added', function(snapshot) {
-  //   res.searchResults.push(snapshot.val());
-  //   })
-  // })
   .then(function() {
-    console.log('rejected')
     next()
-  }, function() {
   })
 
 }
