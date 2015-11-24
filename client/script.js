@@ -1,4 +1,4 @@
-angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queue'])
+angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queue', 'youtube-embed'])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/queue');
@@ -10,7 +10,7 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     })
     .state('videoplayer', {
       url: '/videoplayer',
-      controller: 'videoplayerController',
+      controller: 'MyController',
       templateUrl: 'videoplayer/videoplayer.html'
     })
     .state('queue', {
@@ -55,10 +55,11 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
 
     queueServices.getSong(resultsPath)
     .success(function(data) {
-      console.log('http success, song link returned: ' + data);
-      var first = queueServices.addToQueue(artist, songTitle, data);
+      console.log('http success, song link returned: ' + data[0]);
+      var first = queueServices.addToQueue(artist, songTitle, data[0], data[1]);
       if (first) {
         $scope.currentSong = first;
+        $scope.theBestVideo = data[1];
       }
     })
   };
@@ -82,6 +83,7 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
       // $apply kickstarts the $digest cycle to update current song and $scope.queue
       $scope.$apply(function () {
         $scope.currentSong = next;
+        $scope.theBestVideo = next.videoLink
       });
     }
     $('audio').attr('src', next.source);

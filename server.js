@@ -37,7 +37,7 @@ app.get('/results', function(req, res){
         if (!err && response.statusCode == 200) {
             var locals = JSON.parse(body);
             console.log(body);
-            res.send(locals.link);
+            res.send([locals.link, youTubeLink.slice(9)]);
         }
       });
     }
