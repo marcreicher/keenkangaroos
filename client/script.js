@@ -1,9 +1,5 @@
 angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queue'])
-// .controller('SongsController', function($scope, $firebaseArray){
-//   var ref = new Firebase("https://blazing-fire-8914.firebaseio.com/2/5/");
-//   $scope.songs = {};
-//   $scope.songs.list = $firebaseArray(ref);
-// })
+
 .config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/queue');
   $stateProvider
@@ -32,13 +28,13 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
   $('a').on('click', function() {
     $scope.decade = $(this).parent().parent().data('decade');
     $scope.year = $(this).data('year');
-    var ref = $firebaseArray(new Firebase("https://blazing-fire-8914.firebaseio.com/" + $scope.decade + "/" + $scope.year + "/"));
+    var ref = $firebaseArray(new Firebase("https://peppypossumsripple.firebaseio.com/" + $scope.decade + "/" + $scope.year + "/"));
     ref.$loaded(function(data){
       $scope.songs = {};
       $scope.songs.list = data;
       console.log('just loaded ' + data.length + ' items');
     })
-  })
+  });
 
   $('#player').bind('ended', function(){
     $('audio').attr('src', '');
@@ -54,14 +50,14 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     console.log('adding ' + artist + '\'s song: ' + songTitle);
     queueServices.getSong($scope.resultsPath)
     .success(function(data) {
-      console.log('http success, song link returned');
+      console.log('http success, song link returned: ' + data);
       if ($scope.queue.length === 0 && $('audio').attr('src') === '') {
         console.log('nothing in queue, playing first song');
         $scope.currentSong = artist + ' - ' + songTitle;
         $('audio').attr('src', data);
       } else {
         $scope.queue.push({ artist: artist, songTitle: songTitle, youTubeUrl: data });
-        console.log('the length of the queue is now: ' + $scope.queue.length);
+        console.log('queue length: ' + $scope.queue.length);
       }
     })
   };
@@ -83,26 +79,23 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     });
     $('audio').attr('src', next.youTubeUrl);
   };
-  
 }])
+
 
 .directive('dropdown', function($document) {
   return {
     restrict: "C",
     link: function(scope, elem, attr) {
-
       elem.bind('click', function() {
         elem.toggleClass('dropdown-active');
         elem.addClass('active-recent');
       });
-
       $document.bind('click', function() {
         if(!elem.hasClass('active-recent')) {
           elem.removeClass('dropdown-active');
         }
         elem.removeClass('active-recent');
       });
-
     }
-  }
+  };
 });

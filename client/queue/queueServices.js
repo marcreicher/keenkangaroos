@@ -1,15 +1,4 @@
 angular.module('queue', [])
-// DONE script tag in index.html
-
-// DONE queue module should be DI'd into script.js
-
-// DONE queueServices should be listed in myController with $http, $scope, etc
-
-// DONE in myController, insert a $scope.enqueue function
-
-// DONE use functionality of sendURL function to get the audio src back, but instead of adding it straight to audio tag, enqueue it
-
-// DONE add an event listener for when a song finishes playing to dequeue it off the stack, then add it to audio tag
 
 .factory('queueServices', function($http) {
   
