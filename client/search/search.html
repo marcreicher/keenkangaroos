@@ -2,7 +2,7 @@
  <form >
    <input placeholder='Enter song or artist here' ng-model='userInput'>
    <button ng-click='searchSong(userInput)' >Search</button>
-   <div ng-repeat="song in searchResults" ng-click="sendUrl(song.youTubeUrl)">
+   <div ng-repeat="song in searchResults" ng-click="enqueue(song.artist, song.songTitle, song.youTubeUrl)">
    {{song.songTitle}}
    {{song.year}}
    </div>
