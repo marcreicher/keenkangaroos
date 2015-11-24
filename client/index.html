@@ -126,7 +126,7 @@
       <div>
       <div class="showSongs">
           <div ng-repeat="songs in songs.list">
-            <span style='cursor:pointer' ng-click='sendUrl()'>[{{$index + 1}}] {{songs.artist}}  -  {{songs.songTitle}}</span>
+            <span style='cursor:pointer' ng-click='enqueue()'>[{{$index + 1}}] {{songs.artist}}  -  {{songs.songTitle}}</span>
           </div>
       </div>
       <div class="viewsContainer">
@@ -135,6 +135,7 @@
           <button class="viewsButton">Video</button>
           <button class="viewsButton">Search</button>
         </div>
+
         <div ui-view></div>
 
       </div>
@@ -146,7 +147,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
     <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
     <script src="angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="queue/queueController.js"></script>
+    <script src="queue/queueServices.js"></script>
     <script src="videoplayer/videoplayerController.js"></script>
     <script src="search/searchController.js"></script>
     <script src="script.js"></script>

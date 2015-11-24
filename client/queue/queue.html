@@ -1,1 +1,9 @@
-<div>queue</div>
+<div id="queueView">
+	<h2>Currently Playing</h2>
+		{{ currentSong }}
+	<h2>Current Queue</h2>
+	<div ng-repeat="track in queue">
+		<span style='cursor:pointer' ng-click='dequeue()'>{{track.artist + " - "}} {{track.songTitle}}</span>
+	</div>
+
+</div>
