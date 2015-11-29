@@ -122,7 +122,7 @@
         </ul>
       </div>
 </div> <!-- end of menu -->
-      <audio id="player" src="" preload="auto" controls autoplay></audio>
+      <audio id="audplayer" src="" preload="auto" controls autoplay></audio>
       <div>
       <div class="showSongs">
           <div ng-repeat="songs in songs.list">
@@ -131,13 +131,15 @@
       </div>
       <div class="viewsContainer">
         <div class="buttonBar">
-          <button class="viewsButton" ui-sref="queue">Queue</button>
-          <button class="viewsButton" ui-sref="videoplayer">Video</button>
-          <button class="viewsButton" ui-sref="search">Search</button>
+          <button class="viewsButton" ui-sref="queue" ng-click='showVideo=false'>Queue</button>
+          <button class="viewsButton" ng-click='showVideo=true'>Video</button>
+          <button class="viewsButton" ui-sref="search" ng-click='showVideo=false'>Search</button>
         </div>
 
-        <div ui-view></div>
-
+        <div ui-view ng-show='!showVideo'></div>
+        <div ng-show='showVideo'>
+          <youtube-video id='player' player-vars='playerVars' video-id="theBestVideo" player-width="'100%'" player-height="'425px'"></youtube-video>
+        </div>
       </div>
       </div>
 

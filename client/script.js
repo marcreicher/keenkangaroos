@@ -24,6 +24,40 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
   $scope.year;
   $scope.currentSong;
   $scope.queue = queueServices.queue;
+  $scope.theBestVideo = ''
+
+  $scope.playerVars = {
+    controls: 0,
+    autoplay: 1
+  }
+
+  $scope.$on('youtube.player.ready', function ($event, player) {
+    // play it again
+    console.log('player is ready')
+    player.playVideo();
+  });
+
+  var tag = document.createElement('script');
+
+  // tag.src = "https://www.youtube.com/iframe_api";
+  // var firstScriptTag = document.getElementsByTagName('script')[0];
+  // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  $scope.player;
+  $scope.onYouTubeIframeAPIReady = function() {
+    $scope.player = new YT.Player('player', {
+      height: '418',
+      width: '465',
+      videoId: 'M7lc1UVf-VE',
+      events: {
+        // 'onReady': onPlayerReady,
+        // 'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  // $scope.onYouTubeIframeAPIReady();
+
+
 
   $('a').on('click', function() {
     $scope.decade = $(this).parent().parent().data('decade');
@@ -55,11 +89,15 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
 
     queueServices.getSong(resultsPath)
     .success(function(data) {
-      console.log('http success, song link returned: ' + data[0]);
-      var first = queueServices.addToQueue(artist, songTitle, data[0], data[1]);
+      console.log($('youtube-video').attr('video-id'));
+      console.log('youtubeLink: ' + data[0]);
+      var noVideoPlaying = $('youtube-video').attr('video-id') === 'theBestVideo';
+      console.log(noVideoPlaying);
+      var first = queueServices.addToQueue(artist, songTitle, null, data[0], noVideoPlaying);
       if (first) {
         $scope.currentSong = first;
-        $scope.theBestVideo = data[1];
+        $scope.theBestVideo = data[0]+'?autoplay=1';
+        // $('iframe').attr('src', 'https://www.youtube.com/embed/'+data[1]+'?autoplay=1');
       }
     })
   };
@@ -74,17 +112,22 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
 
   $scope.playNext = function(param) {
     var next = queueServices.queue.shift();
+    // if(queueServices.queue.length > 0) {
+
+    // }
     if (param){
       $scope.currentSong = next || null; 
       if (!next) {
         $('audio').attr('src', '');
-      } 
+      } else {
+        $scope.theBestVideo = next.videoLink
+      }
     } else {
       // $apply kickstarts the $digest cycle to update current song and $scope.queue
-      $scope.$apply(function () {
-        $scope.currentSong = next;
+      // $scope.$apply(function () {
+        // $scope.currentSong = next;
         $scope.theBestVideo = next.videoLink
-      });
+      // });
     }
     $('audio').attr('src', next.source);
   };

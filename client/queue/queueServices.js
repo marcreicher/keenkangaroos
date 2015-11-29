@@ -4,10 +4,12 @@ angular.module('queue', [])
 
 	var queue = [];
 
-	var addToQueue = function(artist, title, src, videoLink) {
-   	if (queue.length === 0 && $('audio').attr('src') === '') {
+	var addToQueue = function(artist, title, src, videoLink, noVidPlaying) {
+   	if (queue.length === 0 && noVidPlaying) {
+
       console.log('nothing in queue, playing first song');
-      $('audio').attr('src', src);
+      // $('audio').attr('src', src);
+      // queue.push({ artist: artist, songTitle: title, source: src, videoLink: videoLink});
       return ({artist: artist, songTitle: title, source: src, videoLink: videoLink})
     } else {
       queue.push({ artist: artist, songTitle: title, source: src, videoLink: videoLink});
