@@ -37,8 +37,8 @@ app.post('/userSearch', queries.findArtist, function(req, res) {
   res.send(res.searchResults);
 });
 
-app.listen(8001, function() {
-  console.log('Listening on localhost:8001')
+app.listen(process.env.PORT||5000, function() {
+  console.log('Listening on localhost:5000')
 });
 
 exports = module.exports = app;
