@@ -24,10 +24,10 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
   $scope.year;
   $scope.currentSong;
   $scope.queue = queueServices.queue;
-  $scope.theBestVideo = ''
+  $scope.theBestVideo = 'theBestVideo'
 
   $scope.playerVars = {
-    controls: 0,
+    // controls: 0,
     autoplay: 1
   }
 
@@ -35,6 +35,11 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     // play it again
     console.log('player is ready')
     player.playVideo();
+  });
+
+  $scope.$on('youtube.player.ended', function ($event, player) {
+    // play it again
+    $scope.playNext(true);
   });
 
   var tag = document.createElement('script');
@@ -89,9 +94,9 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
 
     queueServices.getSong(resultsPath)
     .success(function(data) {
-      console.log($('youtube-video').attr('video-id'));
+      console.log($scope.theBestVideo);
       console.log('youtubeLink: ' + data[0]);
-      var noVideoPlaying = $('youtube-video').attr('video-id') === 'theBestVideo';
+      var noVideoPlaying = $scope.theBestVideo === 'theBestVideo';
       console.log(noVideoPlaying);
       var first = queueServices.addToQueue(artist, songTitle, null, data[0], noVideoPlaying);
       if (first) {
@@ -118,7 +123,8 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     if (param){
       $scope.currentSong = next || null; 
       if (!next) {
-        $('audio').attr('src', '');
+        console.log('stopping the last item in the queue')
+        $scope.theBestVideo = 'theBestVideo';
       } else {
         $scope.theBestVideo = next.videoLink
       }
