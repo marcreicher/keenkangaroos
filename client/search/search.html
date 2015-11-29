@@ -1,13 +1,14 @@
 <div>
  <form >
    <input placeholder='Enter song or artist here' ng-model='userInput'>
-   <button ng-click='searchSong(userInput)' >Search</button>
+   <button ng-click='searchSong(userInput)'>Search</button>
    <div ng-repeat="songs in searchResults" ng-click="enqueue()">
-   {{songs.songTitle}}
-   {{songs.year}}
+   	<span style='cursor:pointer'>
+   	 {{songs.songTitle}}
+   	 {{songs.year}}
+ 		</span>
    </div>
  </form>
 </div>
 
 
-<!-- sendUrl(song.youTubeUrl) -->
