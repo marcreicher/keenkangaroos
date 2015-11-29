@@ -31,15 +31,15 @@ app.get('/results', function(req, res){
       });
       //create api url for retrieving json object containing mp3 link
       var mp3url = apiurl + youTubeLink;
-
+      res.send([youTubeLink.slice(9)]);
       //get the mp3 url
-      request.get(mp3url, function(err, response, body) {
-        if (!err && response.statusCode == 200) {
-            var locals = JSON.parse(body);
-            console.log(body);
-            res.send([locals.link, youTubeLink.slice(9)]);
-        }
-      });
+      // request.get(mp3url, function(err, response, body) {
+      //   if (!err && response.statusCode == 200) {
+      //       var locals = JSON.parse(body);
+      //       console.log(body);
+      //       res.send([locals.link, youTubeLink.slice(9)]);
+      //   }
+      // });
     }
   });
 });
