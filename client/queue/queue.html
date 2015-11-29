@@ -1,6 +1,6 @@
 <div id="queueView">
 	<h2>Currently Playing</h2>
-		<p style='cursor:pointer' ng-click='playNext(true)' ng-show="currentSong">{{ currentSong.songTitle + "  -  "}}{{ currentSong.artist }}</p>
+		<p style='cursor:pointer' ng-click='playNext()' ng-show="currentSong">{{ currentSong.songTitle + "  -  "}}{{ currentSong.artist }}</p>
 	<h2>Current Queue</h2>
 	<div ng-repeat="track in queue">
 		<span style='cursor:pointer' ng-click='dequeue()'>{{track.artist + "  -  "}} {{track.songTitle}}</span>

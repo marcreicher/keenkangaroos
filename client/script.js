@@ -25,44 +25,17 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
   $scope.currentSong;
   $scope.queue = queueServices.queue;
   $scope.theBestVideo = 'theBestVideo'
-
+  $scope.player;
   $scope.playerVars = {
-    // controls: 0,
     autoplay: 1
   }
-
   $scope.$on('youtube.player.ready', function ($event, player) {
-    // play it again
     console.log('player is ready')
     player.playVideo();
   });
-
   $scope.$on('youtube.player.ended', function ($event, player) {
-    // play it again
-    $scope.playNext(true);
+    $scope.playNext();
   });
-
-  var tag = document.createElement('script');
-
-  // tag.src = "https://www.youtube.com/iframe_api";
-  // var firstScriptTag = document.getElementsByTagName('script')[0];
-  // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-  $scope.player;
-  $scope.onYouTubeIframeAPIReady = function() {
-    $scope.player = new YT.Player('player', {
-      height: '418',
-      width: '465',
-      videoId: 'M7lc1UVf-VE',
-      events: {
-        // 'onReady': onPlayerReady,
-        // 'onStateChange': onPlayerStateChange
-      }
-    });
-  }
-
-  // $scope.onYouTubeIframeAPIReady();
-
-
 
   $('a').on('click', function() {
     $scope.decade = $(this).parent().parent().data('decade');
@@ -75,16 +48,13 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     })
   });
 
-  $('#player').bind('ended', function(){
-    $('audio').attr('src', '');
-    if (queueServices.queue.length > 0) {
-      $scope.playNext();
-    } else {
-      $scope.$apply(function() {
-        $scope.currentSong = null;
-      });
-    }
-  });
+  $scope.onYouTubeIframeAPIReady = function() {
+    $scope.player = new YT.Player('player', {
+      height: '418',
+      width: '465',
+      videoId: 'M7lc1UVf-VE'
+    });
+  }
 
   $scope.enqueue = function() {
     var resultsPath = this.songs.youTubeUrl.slice(22);
@@ -97,12 +67,11 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
       console.log($scope.theBestVideo);
       console.log('youtubeLink: ' + data[0]);
       var noVideoPlaying = $scope.theBestVideo === 'theBestVideo';
-      console.log(noVideoPlaying);
+      console.log('no video playing?: ' + noVideoPlaying);
       var first = queueServices.addToQueue(artist, songTitle, null, data[0], noVideoPlaying);
       if (first) {
         $scope.currentSong = first;
         $scope.theBestVideo = data[0]+'?autoplay=1';
-        // $('iframe').attr('src', 'https://www.youtube.com/embed/'+data[1]+'?autoplay=1');
       }
     })
   };
@@ -115,29 +84,16 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     })
   };
 
-  $scope.playNext = function(param) {
+  $scope.playNext = function() {
     var next = queueServices.queue.shift();
-    // if(queueServices.queue.length > 0) {
-
-    // }
-    if (param){
-      $scope.currentSong = next || null; 
-      if (!next) {
-        console.log('stopping the last item in the queue')
-        $scope.theBestVideo = 'theBestVideo';
-      } else {
-        $scope.theBestVideo = next.videoLink
-      }
+    $scope.currentSong = next || null; 
+    if (!next) {
+      console.log('stopping the last item in the queue')
+      $scope.theBestVideo = 'theBestVideo';
     } else {
-      // $apply kickstarts the $digest cycle to update current song and $scope.queue
-      // $scope.$apply(function () {
-        // $scope.currentSong = next;
-        $scope.theBestVideo = next.videoLink
-      // });
+      $scope.theBestVideo = next.videoLink
     }
-    $('audio').attr('src', next.source);
   };
-
 }])
 
 .directive('dropdown', function($document) {
