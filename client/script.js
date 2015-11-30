@@ -60,20 +60,24 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     var resultsPath = this.songs.youTubeUrl.slice(22);
     var artist = this.songs.artist;
     var songTitle = this.songs.songTitle;
-    console.log('adding ' + artist + '\'s song: ' + songTitle);
-
-    queueServices.getSong(resultsPath)
+    console.log('adding ' + artist + '\'s song: ' + songTitle); 
+    queueServices.getArtistPhoto(artist) 
     .success(function(data) {
-      console.log($scope.theBestVideo);
-      console.log('youtubeLink: ' + data[0]);
-      var noVideoPlaying = $scope.theBestVideo === 'theBestVideo';
-      console.log('no video playing?: ' + noVideoPlaying);
-      var first = queueServices.addToQueue(artist, songTitle, null, data[0], noVideoPlaying);
-      if (first) {
-        $scope.currentSong = first;
-        $scope.theBestVideo = data[0]+'?autoplay=1';
-      }
-    })
+      var artistImage = data.artist.image[1]['#text'];
+      queueServices.getSong(resultsPath)    
+      .success(function(data) {
+        console.log($scope.theBestVideo);
+        console.log('youtubeLink: ' + data[0]);
+        var noVideoPlaying = $scope.theBestVideo === 'theBestVideo';
+        console.log('no video playing?: ' + noVideoPlaying);
+        var first = queueServices.addToQueue(artist, songTitle, null, data[0], noVideoPlaying, artistImage);
+        if (first) {
+          $scope.currentSong = first;
+          $scope.theBestVideo = data[0]+'?autoplay=1';
+          $scope.artistImage = artistImage;
+        }
+      });
+    });
   };
   
   $scope.dequeue = function() {
@@ -88,10 +92,11 @@ angular.module('MyApp', ["firebase", "videoplayer", 'ui.router', 'search', 'queu
     var next = queueServices.queue.shift();
     $scope.currentSong = next || null; 
     if (!next) {
-      console.log('stopping the last item in the queue')
+      console.log('stopping the last item in the queue');
       $scope.theBestVideo = 'theBestVideo';
     } else {
-      $scope.theBestVideo = next.videoLink
+      $scope.theBestVideo = next.videoLink;
+      $scope.artistImage = next.artistImage;
     }
   };
 }])
