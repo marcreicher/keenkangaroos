@@ -24,8 +24,8 @@ app.get('/results', function(req, res){
     var youTubeLink;
     $('#results').filter(function(){
       var data = $(this);
-      youTubeLink = data.find('ol.item-section').first().find('a').attr('href');
-      // console.log(youTubeLink);
+      youTubeLink = data.find('div.yt-lockup-content').first().find('a').attr('href');
+      console.log('the youtube link is '+youTubeLink);
     });
     res.send([youTubeLink.slice(9)]);
     }
